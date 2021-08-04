@@ -32,10 +32,10 @@ export function levelToName(level: Level): string {
 	return levelAsString ? levelAsString : 'UNKNOWN';
 }
 
-/** Translate string value to Level, or 1 if not found */
+/** Translate string value to Level, or -1 if not found */
 export function nameToLevel(name: string): number {
 	const level: number | undefined = levelNameMap.get(name);
-	return level === undefined ? 1 : level;
+	return level === undefined ? -1 : level;
 }
 
 /** Compare log level ranks */

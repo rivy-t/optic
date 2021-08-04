@@ -95,14 +95,14 @@ test({
 });
 
 test({
-	name: 'Logger min level set to 1 if rubbish set for cli argument',
+	name: 'Logger min level set to -1 if rubbish set for cli argument',
 	fn() {
 		const logger = new class extends Logger {
 			protected getArgs(): string[] {
 				return ['minLogLevel=rubbish!'];
 			}
 		}();
-		assertEquals(logger.addStream(new TestStream()).minLogLevel(), 1);
+		assertEquals(logger.addStream(new TestStream()).minLogLevel(), -1);
 	},
 });
 
@@ -126,7 +126,7 @@ test({
 });
 
 test({
-	name: 'Logger min level set to 1 if rubbish set for env variable',
+	name: 'Logger min level set to `-1` if rubbish set for env variable',
 	fn() {
 		const logger = new class extends Logger {
 			protected getEnv(): { get(key: string): string | undefined } {
@@ -137,7 +137,7 @@ test({
 				};
 			}
 		}();
-		assertEquals(logger.addStream(new TestStream()).minLogLevel(), 1);
+		assertEquals(logger.addStream(new TestStream()).minLogLevel(), -1);
 	},
 });
 
