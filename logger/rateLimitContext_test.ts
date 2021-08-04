@@ -3,6 +3,8 @@ import { TimeUnit } from '../types.ts';
 import { Level } from './levels.ts';
 import { RateLimitContext, RateLimiter } from './rateLimitContext.ts';
 
+import { sprintf } from 'https://deno.land/std@0.103.0/fmt/printf.ts';
+
 test({
 	name: 'RateLimitContext returns correct context',
 	fn() {
@@ -11,10 +13,10 @@ test({
 		const rlc3 = new RateLimitContext(100, undefined, 'hello');
 		const rlc4 = new RateLimitContext(100);
 
-		assertEquals(rlc1.getContext(Level.Info), '100.1.hello.30');
-		assertEquals(rlc2.getContext(Level.Info), '100.1.30');
-		assertEquals(rlc3.getContext(Level.Info), '100.hello.30');
-		assertEquals(rlc4.getContext(Level.Info), '100.30');
+		assertEquals(rlc1.getContext(Level.Info), sprintf('100.1.hello.%d', Level.Info));
+		assertEquals(rlc2.getContext(Level.Info), sprintf('100.1.%d', Level.Info));
+		assertEquals(rlc3.getContext(Level.Info), sprintf('100.hello.%d', Level.Info));
+		assertEquals(rlc4.getContext(Level.Info), sprintf('100.%d', Level.Info));
 	},
 });
 

@@ -62,7 +62,10 @@ test({
 		deduper.destroy(); //simulate unload event
 		// Only the duplicate message is recorded to the stream from the deduper
 		assertEquals(testStream.logRecords.length, 1);
-		assertEquals(asString(testStream.logRecords[0]), '{"msg":"msg1","level":30,"logger":"abc"}');
+		assertEquals(
+			asString(testStream.logRecords[0]),
+			JSON.stringify({ 'msg': 'msg1', 'level': Level.Info, 'logger': 'abc' }),
+		);
 		assertEquals(meta.streamStats.get(testStream)!.duplicated, 1);
 	},
 });
@@ -83,7 +86,11 @@ test({
 		assertEquals(testStream.logRecords.length, 1);
 		assertEquals(
 			asString(testStream.logRecords[0]),
-			'{"msg":"  ^-- last log repeated 2 additional times","level":30,"logger":"abc"}',
+			JSON.stringify({
+				'msg': '  ^-- last log repeated 2 additional times',
+				'level': Level.Info,
+				'logger': 'abc',
+			}),
 		);
 		assertEquals(meta.streamStats.get(testStream)!.duplicated, 2);
 	},
@@ -106,7 +113,11 @@ test({
 		assertEquals(testStream.logRecords.length, 1);
 		assertEquals(
 			asString(testStream.logRecords[0]),
-			'{"msg":"  ^-- last log repeated 3 additional times","level":30,"logger":"abc"}',
+			JSON.stringify({
+				'msg': '  ^-- last log repeated 3 additional times',
+				'level': Level.Info,
+				'logger': 'abc',
+			}),
 		);
 		assertEquals(meta.streamStats.get(testStream)!.duplicated, 3);
 	},
@@ -131,7 +142,11 @@ test({
 		assertEquals(testStream.logRecords.length, 1);
 		assertEquals(
 			asString(testStream.logRecords[0]),
-			'{"msg":"  ^-- last log repeated 3 additional times","level":30,"logger":"abc"}',
+			JSON.stringify({
+				'msg': '  ^-- last log repeated 3 additional times',
+				'level': Level.Info,
+				'logger': 'abc',
+			}),
 		);
 		assertEquals(meta.streamStats.get(testStream)!.duplicated, 3);
 	},
