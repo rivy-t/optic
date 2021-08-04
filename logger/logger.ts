@@ -14,6 +14,7 @@ import type {
 } from '../types.ts';
 import { Dedupe } from './dedupe.ts';
 import { Level, nameToLevel } from './levels.ts';
+import { compare } from './levels.ts';
 import { ImmutableLogRecord } from './logRecord.ts';
 import { LogMetaImpl } from './meta.ts';
 import { RateLimitContext, RateLimiter } from './rateLimitContext.ts';
@@ -543,7 +544,7 @@ export class Logger {
 	}
 
 	protected loggingBlocked(level: Level): boolean {
-		if (this.#minLevel > level || !this.#ifCondition) {
+		if ((compare(this.#minLevel, level) > 0) || !this.#ifCondition) {
 			return true;
 		}
 

@@ -1,6 +1,7 @@
 // Copyright 2021 the optic authors. All rights reserved. MIT license.
 import { TokenReplacer } from '../../formatters/tokenReplacer.ts';
 import { Level } from '../../logger/levels.ts';
+import { compare } from '../../logger/levels.ts';
 import { LogMeta, LogRecord, ValidationError } from '../../types.ts';
 import { BaseStream } from '../baseStream.ts';
 import { BufWriterSync } from './deps.ts';
@@ -64,9 +65,9 @@ export class FileStream extends BaseStream {
 	}
 
 	handle(logRecord: LogRecord): boolean {
-		if (this.minLogLevel > logRecord.level) return false;
+		if (compare(this.minLogLevel, logRecord.level) > 0) return false;
 
-		if (logRecord.level > Level.Error) {
+		if (compare(logRecord.level, Level.Error) > 0) {
 			this.#deferredLogQueue.push(logRecord);
 			this.processDeferredQueue();
 			this.flush();

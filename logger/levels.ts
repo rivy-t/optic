@@ -10,6 +10,7 @@ export enum Level {
 }
 
 const levelMap = new Map<number, string>();
+
 levelMap.set(Level.Trace, 'Trace');
 levelMap.set(Level.Debug, 'Debug');
 levelMap.set(Level.Info, 'Info');
@@ -33,6 +34,12 @@ export function levelToName(level: Level): string {
 export function nameToLevel(name: string): number {
 	const level: number | undefined = levelNameMap.get(name);
 	return level === undefined ? 1 : level;
+}
+
+/** Compare log level ranks */
+export function compare(a: Level, b: Level): number {
+	// return (a > b) ? 1 : (a < b) ? -1 : 0;
+	return (a - b);
 }
 
 /** Returns the length of the longest log level name. This is used when

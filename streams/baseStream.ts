@@ -1,5 +1,6 @@
 // Copyright 2021 the optic authors. All rights reserved. MIT license.
 import { Level, levelToName } from '../logger/levels.ts';
+import { compare } from '../logger/levels.ts';
 import { LogMetaImpl } from '../logger/meta.ts';
 import type { Formatter, LogMeta, LogRecord, Stream } from '../types.ts';
 
@@ -26,7 +27,7 @@ export abstract class BaseStream implements Stream {
 	destroy(): void {/* NoOp */}
 
 	handle(logRecord: LogRecord): boolean {
-		if (this.#minLevel > logRecord.level) return false;
+		if (compare(this.#minLevel, logRecord.level) > 0) return false;
 		const msg = this.format(logRecord);
 		this.log(msg);
 		return true;
