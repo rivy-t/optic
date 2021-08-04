@@ -11,7 +11,7 @@ test({
     const lr = {
       msg: { a: 6, b: "hello" },
       metadata: [true, undefined, "there"],
-      dateTime: new Date(1592360640000), // "2020-06-17T03:24:00"
+      dateTime: new Date(1592360640000), // "2020-06-17T02:24:00.000Z"
       level: Level.Debug,
       logger: "default",
     };
@@ -29,7 +29,7 @@ test({
     const lr = {
       msg: { a: 6, b: "hello" },
       metadata: [true, undefined, "there"],
-      dateTime: new Date(1592360640000), // "2020-06-17T03:24:00"
+      dateTime: new Date(1592360640000), // "2020-06-17T02:24:00.000Z" == Tuesday, 17 June 2020 at 2:24:00 AM GMT
       level: Level.Debug,
       logger: "default",
     };
@@ -72,7 +72,7 @@ test({
     const lr = {
       msg: { a: 6, b: "hello" },
       metadata: [true, undefined, "there"],
-      dateTime: new Date(1592360640000), // "2020-06-17T03:24:00"
+      dateTime: new Date(1592360640000), // "2020-06-17T02:24:00.000Z"
       level: Level.Debug,
       logger: "default",
     };
@@ -103,7 +103,7 @@ test({
     const lr = {
       msg: "hello",
       metadata: [],
-      dateTime: new Date(1592360640000), // "2020-06-17T03:24:00"
+      dateTime: new Date(1592360640000), // "2020-06-17T02:24:00.000Z" == Tuesday, 17 June 2020 at 2:24:00 AM GMT
       level: Level.Debug,
       logger: "default",
     };
@@ -113,7 +113,7 @@ test({
 
     assertMatch(
       jf.format(lr),
-      /{\"dateTime\":\"0\d:24 Wednesday Jun 17\",\"level\":\"Debug\",\"msg\":\"hello\",\"metadata\":\[\]}/,
+      /{\"dateTime\":\"02:24 Tuesday Jun 17\",\"level\":\"Debug\",\"msg\":\"hello\",\"metadata\":\[\]}/,
     );
     // assertEquals(
     //   jf.format(lr),
@@ -128,7 +128,7 @@ test({
     const lr = {
       msg: new Error("An error was thrown"),
       metadata: [true, undefined, "there"],
-      dateTime: new Date(1592360640000), // "2020-06-17T03:24:00"
+      dateTime: new Date(1592360640000), // "2020-06-17T02:24:00.000Z"
       level: Level.Debug,
       logger: "default",
     };
@@ -147,7 +147,7 @@ test({
     const lr = {
       msg: new Error("A formatted error was thrown"),
       metadata: [true, undefined, "there"],
-      dateTime: new Date(1592360640000), // "2020-06-17T03:24:00"
+      dateTime: new Date(1592360640000), // "2020-06-17T02:24:00.000Z"
       level: Level.Debug,
       logger: "default",
     };

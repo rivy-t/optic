@@ -85,19 +85,19 @@ export class SimpleDateTimeFormatter implements DateTimeFormatter {
     if (formatted.indexOf("hh") >= 0) {
       formatted = formatted.replace(
         "hh",
-        String(dateTime.getHours()).padStart(2, "0"),
+        String(dateTime.getUTCHours()).padStart(2, "0"),
       );
     } else if (formatted.indexOf("h") >= 0) {
-      formatted = formatted.replace("h", String(dateTime.getHours()));
+      formatted = formatted.replace("h", String(dateTime.getUTCHours()));
     } else if (formatted.indexOf("HH") >= 0) {
       formatted = formatted.replace(
         "HH",
-        String(dateTime.getHours() % 12 || 12).padStart(2, "0"),
+        String(dateTime.getUTCHours() % 12 || 12).padStart(2, "0"),
       );
     } else if (formatted.indexOf("H") >= 0) {
       formatted = formatted.replace(
         "H",
-        String(dateTime.getHours() % 12 || 12),
+        String(dateTime.getUTCHours() % 12 || 12),
       );
     }
 
@@ -105,7 +105,7 @@ export class SimpleDateTimeFormatter implements DateTimeFormatter {
     if (formatted.indexOf("mm") >= 0) {
       formatted = formatted.replace(
         "mm",
-        String(dateTime.getMinutes()).padStart(2, "0"),
+        String(dateTime.getUTCMinutes()).padStart(2, "0"),
       );
     }
 
@@ -113,7 +113,7 @@ export class SimpleDateTimeFormatter implements DateTimeFormatter {
     if (formatted.indexOf("ss") >= 0) {
       formatted = formatted.replace(
         "ss",
-        String(dateTime.getSeconds()).padStart(2, "0"),
+        String(dateTime.getUTCSeconds()).padStart(2, "0"),
       );
     }
 
@@ -121,17 +121,17 @@ export class SimpleDateTimeFormatter implements DateTimeFormatter {
     if (formatted.indexOf("SSS") >= 0) {
       formatted = formatted.replace(
         "SSS",
-        this.toStringWithSignificantDigits(dateTime.getMilliseconds(), 3),
+        this.toStringWithSignificantDigits(dateTime.getUTCMilliseconds(), 3),
       );
     } else if (formatted.indexOf("SS") >= 0) {
       formatted = formatted.replace(
         "SS",
-        this.toStringWithSignificantDigits(dateTime.getMilliseconds(), 2),
+        this.toStringWithSignificantDigits(dateTime.getUTCMilliseconds(), 2),
       );
     } else if (formatted.indexOf("S") >= 0) {
       formatted = formatted.replace(
         "S",
-        this.toStringWithSignificantDigits(dateTime.getMilliseconds(), 1),
+        this.toStringWithSignificantDigits(dateTime.getUTCMilliseconds(), 1),
       );
     }
 
@@ -139,22 +139,22 @@ export class SimpleDateTimeFormatter implements DateTimeFormatter {
     if (formatted.indexOf("a") >= 0) {
       formatted = formatted.replace(
         "a",
-        dateTime.getHours() < 12 ? "am" : "pm",
+        dateTime.getUTCHours() < 12 ? "am" : "pm",
       );
     } else if (formatted.indexOf("A") >= 0) {
       formatted = formatted.replace(
         "A",
-        dateTime.getHours() < 12 ? "AM" : "PM",
+        dateTime.getUTCHours() < 12 ? "AM" : "PM",
       );
     }
 
     // Format year
     if (formatted.indexOf("YYYY") >= 0) {
-      formatted = formatted.replace("YYYY", String(dateTime.getFullYear()));
+      formatted = formatted.replace("YYYY", String(dateTime.getUTCFullYear()));
     } else if (formatted.indexOf("YY") >= 0) {
       formatted = formatted.replace(
         "YY",
-        String(dateTime.getFullYear()).slice(2),
+        String(dateTime.getUTCFullYear()).slice(2),
       );
     }
 
@@ -162,30 +162,30 @@ export class SimpleDateTimeFormatter implements DateTimeFormatter {
     if (formatted.indexOf("DD") >= 0) {
       formatted = formatted.replace(
         "DD",
-        String(dateTime.getDate()).padStart(2, "0"),
+        String(dateTime.getUTCDate()).padStart(2, "0"),
       );
     } else if (formatted.indexOf("D") >= 0) {
-      formatted = formatted.replace("D", String(dateTime.getDate()));
+      formatted = formatted.replace("D", String(dateTime.getUTCDate()));
     }
 
     // Format month
     if (formatted.indexOf("MMMM") >= 0) {
       formatted = formatted.replace(
         "MMMM",
-        this.#longMonths[dateTime.getMonth()],
+        this.#longMonths[dateTime.getUTCMonth()],
       );
     } else if (formatted.indexOf("MMM") >= 0) {
       formatted = formatted.replace(
         "MMM",
-        this.#shortMonths[dateTime.getMonth()],
+        this.#shortMonths[dateTime.getUTCMonth()],
       );
     } else if (formatted.indexOf("MM") >= 0) {
       formatted = formatted.replace(
         "MM",
-        String(dateTime.getMonth() + 1).padStart(2, "0"),
+        String(dateTime.getUTCMonth() + 1).padStart(2, "0"),
       );
     } else if (formatted.indexOf("M") >= 0) {
-      formatted = formatted.replace("M", String(dateTime.getMonth() + 1));
+      formatted = formatted.replace("M", String(dateTime.getUTCMonth() + 1));
     }
 
     // Format day of week
