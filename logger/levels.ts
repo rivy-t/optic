@@ -4,6 +4,7 @@ export enum Level {
 	Trace = 10,
 	Debug = 20,
 	Info = 30,
+	Notice = 35,
 	Warn = 40,
 	Error = 50,
 	Critical = 60,
@@ -14,6 +15,7 @@ const levelMap = new Map<number, string>();
 levelMap.set(Level.Trace, 'Trace');
 levelMap.set(Level.Debug, 'Debug');
 levelMap.set(Level.Info, 'Info');
+levelMap.set(Level.Notice, 'Notice');
 levelMap.set(Level.Warn, 'Warn');
 levelMap.set(Level.Error, 'Error');
 levelMap.set(Level.Critical, 'Critical');
