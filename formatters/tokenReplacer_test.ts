@@ -78,7 +78,7 @@ test({
     ).format(lr);
     assertEquals(output, "from fn");
     output = new TokenReplacer().withFormat("{dateTime}").withDateTimeFormat(
-      { formatDateTime: () => "from class" },
+      { format: () => "from class" },
     ).format(lr);
     assertEquals(output, "from class");
   },

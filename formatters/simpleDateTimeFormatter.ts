@@ -37,7 +37,7 @@ import type { DateTimeFormatter } from "../types.ts";
  *
  */
 export class SimpleDateTimeFormatter implements DateTimeFormatter {
-  constructor(private format: string) {}
+  constructor(private formatTemplate: string) {}
 
   #shortDays = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
   #longDays = [
@@ -78,8 +78,8 @@ export class SimpleDateTimeFormatter implements DateTimeFormatter {
     "December",
   ];
 
-  formatDateTime(dateTime: Date): string {
-    let formatted = this.format;
+  format(dateTime: Date): string {
+    let formatted = this.formatTemplate;
 
     // Format hours
     if (formatted.indexOf("hh") >= 0) {

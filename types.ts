@@ -65,7 +65,7 @@ export type DateTimeFormatterFn = (dateTime: Date) => string;
  * Interface for defining a class to format a Date to string
  */
 export interface DateTimeFormatter {
-  formatDateTime: DateTimeFormatterFn;
+  format: DateTimeFormatterFn;
 }
 
 /**

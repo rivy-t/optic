@@ -30,7 +30,7 @@ export class TokenReplacer implements Formatter<string> {
   #levelPadding = 0;
   #withColor = false;
   #dateTimeFormatter: DateTimeFormatter = {
-    formatDateTime: (date: Date) => date.toISOString(),
+    format: (date: Date) => date.toISOString(),
   };
 
   constructor() {
@@ -107,7 +107,7 @@ export class TokenReplacer implements Formatter<string> {
     if (typeof dtf === "string") {
       dtf = new SimpleDateTimeFormatter(dtf);
     } else if (typeof dtf === "function") {
-      dtf = { formatDateTime: dtf };
+      dtf = { format: dtf };
     }
     this.#dateTimeFormatter = dtf;
     return this;
@@ -131,7 +131,7 @@ export class TokenReplacer implements Formatter<string> {
     let formattedMsg = this.#formatString;
     formattedMsg = formattedMsg.replace(
       "{dateTime}",
-      this.#dateTimeFormatter.formatDateTime(logRecord.dateTime),
+      this.#dateTimeFormatter.format(logRecord.dateTime),
     );
     formattedMsg = formattedMsg.replace(
       "{level}",

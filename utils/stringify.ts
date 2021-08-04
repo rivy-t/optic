@@ -132,7 +132,7 @@ function createReplacer(
     } else if (typeof value === "function") {
       return "[function]";
     } else if (originalValue instanceof Date && options?.dateTimeFormatter) {
-      return options.dateTimeFormatter.formatDateTime(originalValue);
+      return options.dateTimeFormatter.format(originalValue);
     }
 
     return hasReplacer ? options!.replacer!.call(this, key, value) : value;

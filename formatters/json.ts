@@ -78,7 +78,7 @@ export class JsonFormatter implements Formatter<string> {
     if (typeof dtf === "string") {
       dtf = new SimpleDateTimeFormatter(dtf);
     } else if (typeof dtf === "function") {
-      dtf = { formatDateTime: dtf };
+      dtf = { format: dtf };
     }
     this.#dateTimeFormatter = dtf;
     return this;
