@@ -16,3 +16,18 @@ export class ConsoleStream extends BaseStream {
 		console.log(msg);
 	}
 }
+
+/** A stream to send log messages to the console error stream.  By default it uses the
+ * TokenReplacer log formatter with color.
+ */
+export class ConsoleErrorStream extends BaseStream {
+	#started = new Date();
+
+	constructor() {
+		super(new TokenReplacer().withColor());
+	}
+
+	log(msg: string): void {
+		console.error(msg);
+	}
+}
