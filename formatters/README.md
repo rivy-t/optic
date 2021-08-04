@@ -1,8 +1,6 @@
 # Log Formatting
 
-Optic's streams allows you to format your logs however you wish, either through
-your own custom formatting or several out of the box formatters. Formatters are
-typically set directly on the stream via `withFormat()`.
+Optic's streams allows you to format your logs however you wish, either through your own custom formatting or several out of the box formatters. Formatters are typically set directly on the stream via `withFormat()`.
 
 ## Optic formatters
 
@@ -10,10 +8,7 @@ Three out of the box formatters are available.
 
 ### TokenReplacer formatter
 
-This formatter allows you to transform a log record to string using tokens as
-placeholders for the various log record fields. When formatting a log record the
-tokens are replaced by values of the log record fields. Any unrecognized tokens
-(as well as other text) are left unmodified.
+This formatter allows you to transform a log record to string using tokens as placeholders for the various log record fields. When formatting a log record the tokens are replaced by values of the log record fields. Any unrecognized tokens (as well as other text) are left unmodified.
 
 Available tokens are:
 
@@ -28,31 +23,18 @@ The constructed token template is then passed to the `withFormat` function.
 Complete example using `TokenReplacer`:
 
 ```typescript
-import { ConsoleStream, Logger } from "https://deno.land/x/optic/mod.ts";
-import { TokenReplacer } from "https://deno.land/x/optic/formatters/mod.ts";
+import { TokenReplacer } from 'https://deno.land/x/optic/formatters/mod.ts';
+import { ConsoleStream, Logger } from 'https://deno.land/x/optic/mod.ts';
 
-const logger = new Logger().addStream(
-  new ConsoleStream()
-    .withFormat(
-      new TokenReplacer()
-        .withFormat("{dateTime} Level: [{level}] Msg: {msg}")
-        .withDateTimeFormat("hh:mm:ss YYYY-MM-DD")
-        .withLevelPadding(10)
-        .withColor(),
-    ),
-);
+const logger = new Logger().addStream(new ConsoleStream().withFormat(new TokenReplacer().withFormat('{dateTime} Level: [{level}] Msg: {msg}').withDateTimeFormat('hh:mm:ss YYYY-MM-DD').withLevelPadding(10).withColor()));
 
-logger.info("hello world");
+logger.info('hello world');
 // Outputs in color to console: 22:09:54 2020-07-10 Level: [Info      ] Msg: hello world
 ```
 
-- `withDateTimeFormat` allows for custom date/time formats and is described in
-  more detail below.
-- `withLevelPadding` allows you to pad the level name to allow the message to
-  start at the same column in the console (as different levels have different
-  lengths).
-- `withColor` allows you to specify if the formatter output should be wrapped in
-  color based on the log level
+- `withDateTimeFormat` allows for custom date/time formats and is described in more detail below.
+- `withLevelPadding` allows you to pad the level name to allow the message to start at the same column in the console (as different levels have different lengths).
+- `withColor` allows you to specify if the formatter output should be wrapped in color based on the log level
 
 The defaults for this formatter are:
 
@@ -63,9 +45,7 @@ The defaults for this formatter are:
 
 ### JSON formatter
 
-This formatter will take a log record and construct a structured JSON formatted
-string with the specified log record fields. You may additionally specify the
-JSON string to be pretty printed and the format of the date/time field.
+This formatter will take a log record and construct a structured JSON formatted string with the specified log record fields. You may additionally specify the JSON string to be pretty printed and the format of the date/time field.
 
 Available fields are:
 
@@ -110,22 +90,18 @@ The defaults for this formatter are:
 
 ### DateTimeFormatter
 
-This is a formatter to be used by other formatters to output the date and time
-with a custom specification. An input string defines the formatting of the
-timestamp using pre-defined tokens. The output date/time string is constructed
-from the local date/time.
+This is a formatter to be used by other formatters to output the date and time with a custom specification. An input string defines the formatting of the timestamp using pre-defined tokens. The output date/time string is constructed from the local date/time.
 
 E.g. to use as a standalone class
 
 ```typescript
-import { SimpleDateTimeFormatter } from "https://deno.land/x/optic/formatters/mod.ts";
+import { SimpleDateTimeFormatter } from 'https://deno.land/x/optic/formatters/mod.ts';
 
-const dtf = new SimpleDateTimeFormatter("hh:mm:ss:SSS YYYY-MM-DD");
+const dtf = new SimpleDateTimeFormatter('hh:mm:ss:SSS YYYY-MM-DD');
 const dateTime = dtf.formatDateTime(new Date());
 ```
 
-The formatting tokens are as per below. Any characters not formatted are left as
-is. Tokens are case sensitive.
+The formatting tokens are as per below. Any characters not formatted are left as is. Tokens are case sensitive.
 
 | Token  | Example      | Value                           |
 | ------ | ------------ | ------------------------------- |
@@ -151,56 +127,43 @@ is. Tokens are case sensitive.
 | `dddd` | `Tuesday`    | long form day of week           |
 | `ddd`  | `Tue`        | short form day of week          |
 
-Optic's formatters allow you to add this formatter as follows, typically using
-the shorthand of just the formatting string:
+Optic's formatters allow you to add this formatter as follows, typically using the shorthand of just the formatting string:
 
 ```typescript
-import { ConsoleStream, Logger } from "https://deno.land/x/optic/mod.ts";
-import { TokenReplacer } from "https://deno.land/x/optic/formatters/mod.ts";
+import { TokenReplacer } from 'https://deno.land/x/optic/formatters/mod.ts';
+import { ConsoleStream, Logger } from 'https://deno.land/x/optic/mod.ts';
 
-const logger = new Logger().addStream(
-  new ConsoleStream()
-    .withFormat(
-      new TokenReplacer()
-        .withDateTimeFormat("hh:mm:ss:SSS YYYY-MM-DD"),
-      // equivalent to:
-      // .withDateTimeFormat(new SimpleDateTimeFormatter("hh:mm:ss:SSS YYYY-MM-DD"))
-    ),
-);
+const logger = new Logger().addStream(new ConsoleStream().withFormat(
+	new TokenReplacer().withDateTimeFormat('hh:mm:ss:SSS YYYY-MM-DD'),
+	// equivalent to:
+	// .withDateTimeFormat(new SimpleDateTimeFormatter("hh:mm:ss:SSS YYYY-MM-DD"))
+));
 ```
 
 ## Using your own custom formatter
 
-You can easily supply your own formatting capabilities via an implementation of
-the `Formatter` interface:
+You can easily supply your own formatting capabilities via an implementation of the `Formatter` interface:
 
 ```typescript
 export interface Formatter<T> {
-  format(logRecord: LogRecord): T;
+	format(logRecord: LogRecord): T;
 }
 ```
 
 Example:
 
 ```typescript
-import {
-  ConsoleStream,
-  Formatter,
-  Logger,
-  LogRecord,
-} from "https://deno.land/x/optic/mod.ts";
+import { ConsoleStream, Formatter, Logger, LogRecord } from 'https://deno.land/x/optic/mod.ts';
 
 class MyFormatter implements Formatter<string> {
-  format(logRecord: LogRecord): string {
-    return "Hello! " + logRecord.msg;
-  }
+	format(logRecord: LogRecord): string {
+		return 'Hello! ' + logRecord.msg;
+	}
 }
 
-const logger = new Logger().addStream(
-  new ConsoleStream().withFormat(new MyFormatter()),
-);
+const logger = new Logger().addStream(new ConsoleStream().withFormat(new MyFormatter()));
 
-logger.info("Some info message");
+logger.info('Some info message');
 
 // Outputs to console: "Hello! Some info message"
 ```

@@ -1,15 +1,15 @@
 // Copyright 2021 the optic authors. All rights reserved. MIT license.
+import { levelToName, longestLevelName } from '../logger/levels.ts';
+import { asString } from '../utils/asString.ts';
 import {
-  DateTimeFormatter,
-  DateTimeFormatterFn,
-  Formatter,
-  LogRecord,
-  ValidationError,
-} from "../types.ts";
-import { SimpleDateTimeFormatter } from "./simpleDateTimeFormatter.ts";
-import { asString } from "../utils/asString.ts";
-import { levelToName, longestLevelName } from "../logger/levels.ts";
-import { getColorForLevel } from "./color.ts";
+	DateTimeFormatter,
+	DateTimeFormatterFn,
+	Formatter,
+	LogRecord,
+	ValidationError,
+} from '../types.ts';
+import { getColorForLevel } from './color.ts';
+import { SimpleDateTimeFormatter } from './simpleDateTimeFormatter.ts';
 
 /**
  * A formatter which allows you to use tokens in a string for place
@@ -25,34 +25,32 @@ import { getColorForLevel } from "./color.ts";
  * ```
  */
 export class TokenReplacer implements Formatter<string> {
-  #validTokens = ["{dateTime}", "{level}", "{msg}", "{metadata}", "{logger}"];
-  #formatString = "{dateTime} {level} {msg} {metadata}";
-  #levelPadding = 0;
-  #withColor = false;
-  #dateTimeFormatter: DateTimeFormatter = {
-    format: (date: Date) => date.toISOString(),
-  };
+	#validTokens = ['{dateTime}', '{level}', '{msg}', '{metadata}', '{logger}'];
+	#formatString = '{dateTime} {level} {msg} {metadata}';
+	#levelPadding = 0;
+	#withColor = false;
+	#dateTimeFormatter: DateTimeFormatter = { format: (date: Date) => date.toISOString() };
 
-  constructor() {
-    this.#levelPadding = longestLevelName();
-  }
+	constructor() {
+		this.#levelPadding = longestLevelName();
+	}
 
-  /** Get the token string used in formatting messages */
-  get formatString(): string {
-    return this.#formatString;
-  }
+	/** Get the token string used in formatting messages */
+	get formatString(): string {
+		return this.#formatString;
+	}
 
-  /** Get the fixed length that level should be printed at */
-  get levelPadding(): number {
-    return this.#levelPadding;
-  }
+	/** Get the fixed length that level should be printed at */
+	get levelPadding(): number {
+		return this.#levelPadding;
+	}
 
-  /** Returns true if log messages are output in color */
-  isColor(): boolean {
-    return this.#withColor;
-  }
+	/** Returns true if log messages are output in color */
+	isColor(): boolean {
+		return this.#withColor;
+	}
 
-  /**
+	/**
    * To make logs more consistent in format, this functionality allows you
    * to set the minimum length output for the level.  E.g. if the levelPadding
    * is set to 10 and a debug log message is formatted, then you will get:
@@ -65,12 +63,12 @@ export class TokenReplacer implements Formatter<string> {
    *
    * @param padding min length to pad the {level} token value
    */
-  withLevelPadding(padding: number): TokenReplacer {
-    this.#levelPadding = padding;
-    return this;
-  }
+	withLevelPadding(padding: number): TokenReplacer {
+		this.#levelPadding = padding;
+		return this;
+	}
 
-  /**
+	/**
    * Set the format to be used by constructing a string with tokens.  Tokens
    * are fields from a log record surrounded in curly brackets.  Available
    * fields are: `{dateTime}`, `{level}`, `{msg}`, `{metadata}` or `{logger}`.
@@ -78,22 +76,22 @@ export class TokenReplacer implements Formatter<string> {
    *
    * @param tokenString
    */
-  withFormat(tokenString: string): this {
-    const matches = tokenString.match(/{([^{].+?)}/g);
-    if (matches) {
-      for (let i = 0; i < matches.length; i++) {
-        if (this.#validTokens.indexOf(matches[i]) < 0) {
-          throw new ValidationError(`${matches[i]} is not a valid token`);
-        }
-      }
-    } else {
-      throw new ValidationError("No matching tokens found in " + tokenString);
-    }
-    this.#formatString = tokenString;
-    return this;
-  }
+	withFormat(tokenString: string): this {
+		const matches = tokenString.match(/{([^{].+?)}/g);
+		if (matches) {
+			for (let i = 0; i < matches.length; i++) {
+				if (this.#validTokens.indexOf(matches[i]) < 0) {
+					throw new ValidationError(`${matches[i]} is not a valid token`);
+				}
+			}
+		} else {
+			throw new ValidationError('No matching tokens found in ' + tokenString);
+		}
+		this.#formatString = tokenString;
+		return this;
+	}
 
-  /**
+	/**
    * Allows the ability of the formatter to apply custom formatting to the
    * log message date/time.
    *
@@ -101,19 +99,17 @@ export class TokenReplacer implements Formatter<string> {
    * implementation, or a `SimpleDateTimeFormatter` format string (see
    * `SimpleDateTimeFormatter` for details)
    */
-  withDateTimeFormat(
-    dtf: DateTimeFormatterFn | DateTimeFormatter | string,
-  ): TokenReplacer {
-    if (typeof dtf === "string") {
-      dtf = new SimpleDateTimeFormatter(dtf);
-    } else if (typeof dtf === "function") {
-      dtf = { format: dtf };
-    }
-    this.#dateTimeFormatter = dtf;
-    return this;
-  }
+	withDateTimeFormat(dtf: DateTimeFormatterFn | DateTimeFormatter | string): TokenReplacer {
+		if (typeof dtf === 'string') {
+			dtf = new SimpleDateTimeFormatter(dtf);
+		} else if (typeof dtf === 'function') {
+			dtf = { format: dtf };
+		}
+		this.#dateTimeFormatter = dtf;
+		return this;
+	}
 
-  /**
+	/**
    * For environments which support colored output, this allows you to turn on
    * and off color formatting of logs. Default is false.  Color affects an
    * entire log message string.  The color used is defined by the colorRules
@@ -121,39 +117,38 @@ export class TokenReplacer implements Formatter<string> {
    *
    * @param on If true or unspecified, logs will be output in color
    */
-  withColor(on?: boolean): TokenReplacer {
-    if (on === undefined) this.#withColor = true;
-    else this.#withColor = on;
-    return this;
-  }
+	withColor(on?: boolean): TokenReplacer {
+		if (on === undefined) this.#withColor = true;
+		else this.#withColor = on;
+		return this;
+	}
 
-  format(logRecord: LogRecord): string {
-    let formattedMsg = this.#formatString;
-    formattedMsg = formattedMsg.replace(
-      "{dateTime}",
-      this.#dateTimeFormatter.format(logRecord.dateTime),
-    );
-    formattedMsg = formattedMsg.replace(
-      "{level}",
-      levelToName(logRecord.level)?.padEnd(this.#levelPadding, " ") ||
-        "UNKNOWN",
-    );
-    formattedMsg = formattedMsg.replace("{msg}", asString(logRecord.msg));
+	format(logRecord: LogRecord): string {
+		let formattedMsg = this.#formatString;
+		formattedMsg = formattedMsg.replace(
+			'{dateTime}',
+			this.#dateTimeFormatter.format(logRecord.dateTime),
+		);
+		formattedMsg = formattedMsg.replace(
+			'{level}',
+			levelToName(logRecord.level)?.padEnd(this.#levelPadding, ' ') || 'UNKNOWN',
+		);
+		formattedMsg = formattedMsg.replace('{msg}', asString(logRecord.msg));
 
-    let metadataReplacement = "";
-    if (logRecord.metadata.length > 0) {
-      for (const metaItem of logRecord.metadata) {
-        metadataReplacement += asString(metaItem) + " ";
-      }
-      metadataReplacement = metadataReplacement.slice(0, -1);
-    }
-    formattedMsg = formattedMsg.replace("{metadata}", metadataReplacement);
-    formattedMsg = formattedMsg.replace("{logger}", logRecord.logger);
+		let metadataReplacement = '';
+		if (logRecord.metadata.length > 0) {
+			for (const metaItem of logRecord.metadata) {
+				metadataReplacement += asString(metaItem) + ' ';
+			}
+			metadataReplacement = metadataReplacement.slice(0, -1);
+		}
+		formattedMsg = formattedMsg.replace('{metadata}', metadataReplacement);
+		formattedMsg = formattedMsg.replace('{logger}', logRecord.logger);
 
-    if (this.#withColor && globalThis.Deno) {
-      const colorize = getColorForLevel(logRecord.level);
-      formattedMsg = colorize ? colorize(formattedMsg) : formattedMsg;
-    }
-    return formattedMsg;
-  }
+		if (this.#withColor && globalThis.Deno) {
+			const colorize = getColorForLevel(logRecord.level);
+			formattedMsg = colorize ? colorize(formattedMsg) : formattedMsg;
+		}
+		return formattedMsg;
+	}
 }

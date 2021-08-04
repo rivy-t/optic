@@ -1,6 +1,6 @@
 // Copyright 2021 the optic authors. All rights reserved. MIT license.
-import { Level } from "../logger/levels.ts";
-import { blue, bold, gray, red, yellow } from "../deps.ts";
+import { Level } from '../logger/levels.ts';
+import { blue, bold, gray, red, yellow } from '../deps.ts';
 
 /**
  * A type for defining a function which takes in a string and outputs the string
@@ -20,6 +20,6 @@ colorRules.set(Level.Error, (msg: string) => red(msg));
 colorRules.set(Level.Critical, (msg: string) => bold(red(msg)));
 
 export function getColorForLevel(level: number): ColorRule {
-  const color: ColorRule | undefined = colorRules.get(level);
-  return color ? color : (msg: string) => msg;
+	const color: ColorRule | undefined = colorRules.get(level);
+	return color ? color : (msg: string) => msg;
 }
