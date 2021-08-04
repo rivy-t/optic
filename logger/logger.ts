@@ -1,5 +1,5 @@
 // Copyright 2021 the optic authors. All rights reserved. MIT license.
-import { ConsoleStream } from '../streams/consoleStream.ts';
+import { ConsoleErrorStream } from '../streams/consoleStream.ts';
 import type {
 	Filter,
 	FilterFn,
@@ -22,7 +22,7 @@ import { RateLimitContext, RateLimiter } from './rateLimitContext.ts';
 // deno-lint-ignore no-explicit-any
 export type AnyFunction = (...args: any[]) => any;
 
-const defaultStream = new ConsoleStream();
+const defaultStream = new ConsoleErrorStream();
 
 export class Logger {
 	#name = 'default';
