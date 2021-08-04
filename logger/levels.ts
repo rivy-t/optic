@@ -10,20 +10,18 @@ export enum Level {
 }
 
 const levelMap = new Map<number, string>();
-levelMap.set(10, "Trace");
-levelMap.set(20, "Debug");
-levelMap.set(30, "Info");
-levelMap.set(40, "Warn");
-levelMap.set(50, "Error");
-levelMap.set(60, "Critical");
+levelMap.set(Level.Trace, "Trace");
+levelMap.set(Level.Debug, "Debug");
+levelMap.set(Level.Info, "Info");
+levelMap.set(Level.Warn, "Warn");
+levelMap.set(Level.Error, "Error");
+levelMap.set(Level.Critical, "Critical");
 
 const levelNameMap = new Map<string, number>();
-levelNameMap.set("Trace", Level.Trace);
-levelNameMap.set("Debug", Level.Debug);
-levelNameMap.set("Info", Level.Info);
-levelNameMap.set("Warn", Level.Warn);
-levelNameMap.set("Error", Level.Error);
-levelNameMap.set("Critical", Level.Critical);
+
+levelMap.forEach((name, level) => {
+  levelNameMap.set(name, level);
+});
 
 /** Translate Level enum to string value */
 export function levelToName(level: Level): string {
