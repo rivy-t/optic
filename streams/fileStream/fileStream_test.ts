@@ -158,7 +158,7 @@ test({
 });
 
 test({
-	name: "Log records less than min log level aren't handled",
+	name: "Log records less ranked lower than min log level aren't handled",
 	fn() {
 		const fs = new FileStream(LOG_FILE).withMinLogLevel(Level.Error);
 		assert(!fs.handle(logRec("shouldn't be logged", Level.Debug)));
@@ -166,7 +166,7 @@ test({
 });
 
 test({
-	name: 'Log level of error or less will queue log records',
+	name: 'Log level of rank error or lower will queue log records',
 	async fn() {
 		const fs = new TestableFileStream(LOG_FILE);
 		fs.setup();
@@ -188,7 +188,7 @@ test({
 });
 
 test({
-	name: 'Log level of greater than error will immediately cut log record',
+	name: 'Log level of higher rank than error will immediately cut log record',
 	fn() {
 		const fs = new TestableFileStream(LOG_FILE);
 		fs.setup();
