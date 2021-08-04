@@ -1,13 +1,23 @@
 // Copyright 2021 the optic authors. All rights reserved. MIT license.
+
 /** Default log levels */
+// export enum Level {
+// 	Trace = 10,
+// 	Debug = 20,
+// 	Info = 30,
+// 	Notice = 35,
+// 	Warn = 40,
+// 	Error = 50,
+// 	Critical = 60,
+// }
 export enum Level {
-	Trace = 10,
-	Debug = 20,
-	Info = 30,
-	Notice = 35,
-	Warn = 40,
-	Error = 50,
-	Critical = 60,
+	Critical,
+	Error,
+	Warn,
+	Notice,
+	Info,
+	Debug,
+	Trace,
 }
 
 const levelMap = new Map<number, string>();
@@ -38,10 +48,17 @@ export function nameToLevel(name: string): number {
 	return level === undefined ? -1 : level;
 }
 
-/** Compare log level ranks */
+/** Compare log level priority ranks */
 export function compare(a: Level, b: Level): number {
 	// return (a > b) ? 1 : (a < b) ? -1 : 0;
-	return (a - b);
+
+	if ((a < 0) && (b < 0)) return 0; // unknown level are of equal rank
+
+	// known ranks are ranked as a higher priority than unknown ranks
+	if (a < 0) return -1;
+	if (b < 0) return 1;
+
+	return (b - a);
 }
 
 /** Returns the length of the longest log level name. This is used when
