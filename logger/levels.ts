@@ -11,7 +11,8 @@
 // 	Critical = 60,
 // }
 export enum Level {
-	Critical,
+	UNKNOWN = -1,
+	Critical = 0,
 	Error,
 	Warn,
 	Notice,
@@ -22,6 +23,9 @@ export enum Level {
 
 const levelMap = new Map<number, string>();
 
+const UnknownName = 'UNKNOWN';
+
+levelMap.set(Level.UNKNOWN, UnknownName);
 levelMap.set(Level.Trace, 'Trace');
 levelMap.set(Level.Debug, 'Debug');
 levelMap.set(Level.Info, 'Info');
@@ -38,25 +42,24 @@ levelMap.forEach((name, level) => {
 
 /** Translate Level enum to string value */
 export function levelToName(level: Level): string {
-	const levelAsString = levelMap.get(level);
-	return levelAsString ? levelAsString : 'UNKNOWN';
+	return levelMap.get(level) ?? levelMap.get(Level.UNKNOWN) ?? UnknownName;
 }
 
-/** Translate string value to Level, or -1 if not found */
+/** Translate string value to Level, or Level.UNKNOWN if not found */
 export function nameToLevel(name: string): number {
 	const level: number | undefined = levelNameMap.get(name);
-	return level === undefined ? -1 : level;
+	return level === undefined ? Level.UNKNOWN : level;
 }
 
 /** Compare log level priority ranks */
 export function compare(a: Level, b: Level): number {
 	// return (a > b) ? 1 : (a < b) ? -1 : 0;
 
-	if ((a < 0) && (b < 0)) return 0; // unknown level are of equal rank
+	if ((a < Level.Critical) && (b < Level.Critical)) return 0; // unknown level are of equal rank
 
 	// known ranks are ranked as a higher priority than unknown ranks
-	if (a < 0) return -1;
-	if (b < 0) return 1;
+	if (a < Level.Critical) return -1;
+	if (b < Level.Critical) return 1;
 
 	return (b - a);
 }
