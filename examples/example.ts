@@ -25,6 +25,8 @@ log.error(() => {
 
 log.log(Level.Notice, 'test');
 
+log.log(Level.Notice, { LevelKeys: Object.keys(Level) });
+
 // for (let i = 0; i < 1000000; i++) {
 // 	log.every(100).warn('Logs every 100th iteration');
 // 	log.atMostEvery(10, TimeUnit.SECONDS).warn('Logs at most once every 10 seconds');
