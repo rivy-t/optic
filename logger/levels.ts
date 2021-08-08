@@ -1,5 +1,7 @@
 // Copyright 2021 the optic authors. All rights reserved. MIT license.
 
+// ref: syslog severity levels @ [RFC 5424]<https://datatracker.ietf.org/doc/html/rfc5424> @@ <https://archive.is/3duym>
+
 /** Default log levels */
 // export enum Level {
 // 	Trace = 10,
@@ -13,9 +15,11 @@
 export enum Level {
 	Critical = 0,
 	Error,
-	Warn,
+	Warning,
+	Warn = Warning,
 	Notice,
-	Info,
+	Information,
+	Info = Information,
 	Debug,
 	Trace,
 }
@@ -38,7 +42,7 @@ const levelMap = new Map<number, string>();
 // levelMap.set(Level.Error, 'Error');
 // levelMap.set(Level.Critical, 'Critical');
 
-function enumKeys<O extends object, K extends keyof O = keyof O>(obj: O): K[] {
+function enumNames<O extends object, K extends keyof O = keyof O>(obj: O): K[] {
 	return Object.keys(obj).filter((k) => Number.isNaN(+k)) as K[];
 }
 
@@ -51,8 +55,8 @@ function enumKeys<O extends object, K extends keyof O = keyof O>(obj: O): K[] {
 // 	levelMap.set(Number(Level[v]), v);
 // }
 
-enumKeys(Level).forEach((name) => {
-	levelMap.set(Level[name], name);
+enumNames(Level).forEach((name) => {
+	if (!levelMap.has(Level[name])) levelMap.set(Level[name], name);
 });
 
 levelMap.set(LevelUnknown, LevelUnknownName);
