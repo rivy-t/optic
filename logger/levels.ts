@@ -11,7 +11,6 @@
 // 	Critical = 60,
 // }
 export enum Level {
-	UNKNOWN = -1,
 	Critical = 0,
 	Error,
 	Warn,
@@ -21,18 +20,42 @@ export enum Level {
 	Trace,
 }
 
+export interface ILevel<TLevelEnum extends Level = Level> {
+	UNKNOWN: number;
+	names: Map<TLevelEnum, string>;
+}
+
+const LevelUnknown = -1;
+const LevelUnknownName = 'UNKNOWN';
+
 const levelMap = new Map<number, string>();
 
-const UnknownName = 'UNKNOWN';
+// levelMap.set(Level.Trace, 'Trace');
+// levelMap.set(Level.Debug, 'Debug');
+// levelMap.set(Level.Info, 'Info');
+// levelMap.set(Level.Notice, 'Notice');
+// levelMap.set(Level.Warn, 'Warn');
+// levelMap.set(Level.Error, 'Error');
+// levelMap.set(Level.Critical, 'Critical');
 
-levelMap.set(Level.UNKNOWN, UnknownName);
-levelMap.set(Level.Trace, 'Trace');
-levelMap.set(Level.Debug, 'Debug');
-levelMap.set(Level.Info, 'Info');
-levelMap.set(Level.Notice, 'Notice');
-levelMap.set(Level.Warn, 'Warn');
-levelMap.set(Level.Error, 'Error');
-levelMap.set(Level.Critical, 'Critical');
+function enumKeys<O extends object, K extends keyof O = keyof O>(obj: O): K[] {
+	return Object.keys(obj).filter((k) => Number.isNaN(+k)) as K[];
+}
+
+// console.error({ k: enumKeys(Level), l: enumKeys(Level).map((k) => Level[k]) });
+
+// for (const v in enumKeys(Level)) {
+// 	// if (typeof Level[key] !== 'string') continue;
+// 	// levelMap.set(Level[key], key);
+// 	// if (isNaN(Number(v))) continue;
+// 	levelMap.set(Number(Level[v]), v);
+// }
+
+enumKeys(Level).forEach((name) => {
+	levelMap.set(Level[name], name);
+});
+
+levelMap.set(LevelUnknown, LevelUnknownName);
 
 const levelNameMap = new Map<string, number>();
 
@@ -42,13 +65,13 @@ levelMap.forEach((name, level) => {
 
 /** Translate Level enum to string value */
 export function levelToName(level: Level): string {
-	return levelMap.get(level) ?? levelMap.get(Level.UNKNOWN) ?? UnknownName;
+	return levelMap.get(level) ?? levelMap.get(LevelUnknown) ?? LevelUnknownName;
 }
 
-/** Translate string value to Level, or Level.UNKNOWN if not found */
+/** Translate string value to Level, or LevelUnknown if not found */
 export function nameToLevel(name: string): number {
 	const level: number | undefined = levelNameMap.get(name);
-	return level === undefined ? Level.UNKNOWN : level;
+	return level === undefined ? LevelUnknown : level;
 }
 
 /** Compare log level priority ranks */
