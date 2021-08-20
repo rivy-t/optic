@@ -29,6 +29,8 @@ export enum Level {
 const LevelUnknown = -1;
 const LevelUnknownName = 'UNKNOWN';
 
+// see `powerlog`
+
 // ref: [SO/Javascript ~ object property enumeration order](https://stackoverflow.com/questions/5525795/does-javascript-guarantee-object-property-order)
 // ref: [SO/Typescript ~ names of enum entries](https://stackoverflow.com/questions/18111657/how-to-get-names-of-enum-entries)
 // ref: [SO/Typescript ~ enum object `values()`](https://stackoverflow.com/questions/56044872/typescript-enum-object-values-return-value)
@@ -62,6 +64,9 @@ export class X<T extends ILevel<TLevelEnum>, K extends keyof T = keyof T, TLevel
 		this.#minLevel = o.UNKNOWN;
 	}
 }
+export type TLevelMethods<TLevelEnum> = {
+	[key in keyof TLevelEnum]: <T>(message: string, ...args: unknown[]) => T;
+};
 
 const _x = new X({ UNKNOWN: Symbol() });
 // x.levels = [
