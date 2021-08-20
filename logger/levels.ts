@@ -24,13 +24,62 @@ export enum Level {
 	Trace,
 }
 
-export interface ILevel<TLevelEnum extends Level = Level> {
-	UNKNOWN: number;
-	names: Map<TLevelEnum, string>;
-}
+//====
 
 const LevelUnknown = -1;
 const LevelUnknownName = 'UNKNOWN';
+
+// ref: [SO/Javascript ~ object property enumeration order](https://stackoverflow.com/questions/5525795/does-javascript-guarantee-object-property-order)
+// ref: [SO/Typescript ~ names of enum entries](https://stackoverflow.com/questions/18111657/how-to-get-names-of-enum-entries)
+// ref: [SO/Typescript ~ enum object `values()`](https://stackoverflow.com/questions/56044872/typescript-enum-object-values-return-value)
+// ref: [SO/Typescript ~ enum keys as union string](https://stackoverflow.com/questions/50376977/generic-type-to-get-enum-keys-as-union-string-in-typescript)
+
+function enumNames<O extends Record<string, unknown>, K extends keyof O = keyof O>(obj: O): K[] {
+	// order is guaranteed as "insertion order" for ES2015+; ie, name array will be in the order as defined in the enum is definition
+	return Object.keys(obj).filter((k) => Number.isNaN(+k)) as K[];
+}
+
+// ref: [SO/Typescript ~ sorting based on enum constants](https://stackoverflow.com/questions/40085998/typescript-sorting-based-on-enum-constants)
+// ref: [Using TypeScript — Extending Generic Types](https://levelup.gitconnected.com/using-typescript-extending-generic-types-2c18459934ea) @@ <https://archive.is/NcCBI>
+// refs: [Typescript ~ get type of class property](https://stackoverflow.com/a/54432326/43774)
+// import type { ILevel } from './levels.ts';
+export interface ILevel<TLevelEnum = Level, TUnknown = symbol> {
+	UNKNOWN?: TUnknown;
+	// levels: TLevelEnum[];
+	// k: keyof TLevelEnum;
+	names?: Map<TLevelEnum, string>;
+}
+// const dLevel: ILevel = {
+// 	UNKNOWN: Symbol('UNKNOWN'),
+// 	// levels: [],
+// 	names: new Map(enumNames(Level).map((k) => [Level[k], k])),
+// };
+export class X<T extends ILevel<TLevelEnum>, K extends keyof T = keyof T, TLevelEnum = Level> {
+	levels: K[];
+	#minLevel: K | T['UNKNOWN'];
+	constructor(o: T /* = dLevel */) {
+		this.levels = [];
+		this.#minLevel = o.UNKNOWN;
+	}
+}
+
+const _x = new X({ UNKNOWN: Symbol() });
+// x.levels = [
+// 	Level.Trace,
+// 	Level.Debug,
+// 	Level.Info,
+// 	Level.Notice,
+// 	Level.Warn,
+// 	Level.Error,
+// 	Level.Critical,
+// ];
+
+// export interface ILevel<TLevelEnum extends Level = Level> {
+// 	UNKNOWN: number;
+// 	names: Map<TLevelEnum, string>;
+// }
+
+//====
 
 const levelMap = new Map<number, string>();
 
@@ -41,10 +90,6 @@ const levelMap = new Map<number, string>();
 // levelMap.set(Level.Warn, 'Warn');
 // levelMap.set(Level.Error, 'Error');
 // levelMap.set(Level.Critical, 'Critical');
-
-function enumNames<O extends object, K extends keyof O = keyof O>(obj: O): K[] {
-	return Object.keys(obj).filter((k) => Number.isNaN(+k)) as K[];
-}
 
 // console.error({ k: enumKeys(Level), l: enumKeys(Level).map((k) => Level[k]) });
 
